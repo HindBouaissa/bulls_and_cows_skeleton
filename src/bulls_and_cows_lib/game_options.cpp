@@ -140,4 +140,53 @@ namespace bulls_and_cows
         output_stream << "Maximum allowed character has been modified succefully\n";
     }
 
+    bool save_game_options(std::ostream & output_file_stream, const GameOptions& game_options)
+    {
+        if (output_file_stream)
+        {
+            output_file_stream << "max_number_of_attempts=" << game_options.max_number_of_attempts
+                               << "\n"
+                                  "number_of_characters_per_code="
+                               << game_options.number_of_characters_per_code
+                               << "\n"
+                                  "minimum_allowed_character="
+                               << game_options.minimum_allowed_character
+                               << "\n"
+                                  "maximum_allowed_character="
+                               << game_options.maximum_allowed_character << "\n";
+
+            std::cout << "\nYour options have been saved succefully\n";
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool load_game_options(std::istream & input_file_stream, GameOptions & game_options)
+    {
+        std::string line;
+
+        while (std::getline(input_file_stream, line)) // on lit ligne par ligne
+        {
+            std::size_t delimiter = line.find("=");
+            std::string token = line.substr(0, delimiter);
+            std::string numb = line.substr(delimiter + 1);
+
+            if (token == "max_number_of_attempts")
+                game_options.max_number_of_attempts = std::atoi(numb.c_str());
+
+            else if (token == "number_of_characters_per_code")
+                game_options.number_of_characters_per_code = std::atoi(numb.c_str());
+
+            else if (token == "minimum_allowed_character")
+                game_options.minimum_allowed_character = numb[0];
+
+            else if (token == "maximum_allowed_character")
+                game_options.maximum_allowed_character = numb[0];
+        }
+
+        return true;
+    }
+
 } // namespace bulls_and_cows
